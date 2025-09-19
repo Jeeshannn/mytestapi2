@@ -26,22 +26,21 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mytestapi:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/mytestapi:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/mytestapi:latest
           file: ./Dockerfile
 
- deploy:
-  runs-on: ubuntu-latest
-  needs: build
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Deploy to Azure Web App using Publish Profile
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'cidocker'
-        images: '${{ secrets.DOCKERHUB_USERNAME }}/mytestapi:${{ github.sha }}'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-
+      - name: Deploy to Azure Web App using Publish Profile
+        uses: azure/webapps-deploy@v2
+        with:
           app-name: 'cidocker'
-          images: '${{ secrets.DOCKERHUB_USERNAME }}/mytestapi:${{ github.sha }}'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/mytestapi:${{ github.sha }}

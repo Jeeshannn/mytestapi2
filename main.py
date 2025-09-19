@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
 
-app = FastAPI(title="User Identity API - Mocked with Ci/cd")
+git add .
 
 # -------------------------
 # Mock Database
